@@ -1,0 +1,13 @@
+[
+    {
+        "id": "DaxkNTs1S3l3DfF7BxKp0YhuYXeevKM1wStZhPgvveIZ4P4",
+        "accountId": "9FIBsTLPJbOibi6VoTgmq43stRQPigH1W8TheQdYj3quMg",
+        "puuid": "dZFHT7eMWkbjxMjkvxUeeArq9NY5WlEdQsqKOusYD_7SycWfnAR553tilVG-JbW9sYPkcd7YPZCAAA",
+        "name": "Bloojayz",
+        "profileIconId": 561,
+        "revisionDate": 1617904388000,
+        "summonerLevel": 149,
+        "tier": "SILVER",
+        "rank": "II"
+    }
+]
