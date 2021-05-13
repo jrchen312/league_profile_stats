@@ -1,9 +1,11 @@
 import requests
 import json
 
+###############################################################################
+# First stage:
 
 
-#this should be placed inside of a dictionary. 'unranked', 'bronze', .... 'challenger'
+# dictionary. 'unranked', 'bronze', .... 'challenger'
 def loadRanks(self):
     self.rankIcons = dict()
     temp = self.loadImage('images/Emblem_Iron.png')
@@ -26,7 +28,6 @@ def loadRanks(self):
     self.rankIcons['challenger'] = self.scaleImage(temp, 1/6)
 
     self.rankIcons['unranked'] = self.rankIcons['challenger']
-
 
 
 #loads the summoner icons into self.summonerSpellIcons.
@@ -80,7 +81,7 @@ def loadQueueDetails(self):
 
 
 #
-##
+################################################################################
 #
 #
 # 2.
