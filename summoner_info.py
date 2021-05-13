@@ -1,5 +1,7 @@
 #need to slim this down a ton. 
 import json
+import requests
+import time
 import summoner_info_appstarted
 
 
@@ -91,11 +93,12 @@ def mousePressed(self, event):
         print('UPDATING')
         self.updating = True
         #getting the file name:
-        file = self.summonerName.lower()
-        for i in range(len(file)):
-            if file[i] == " ":
-                file = file[:i] + file[i+1:]
-        fileName = file + 'Data.txt'
+        fileName = self.app.summonerInfo['accountId']
+        #file = self.summonerName.lower()
+        #for i in range(len(file)):
+        #    if file[i] == " ":
+        #        file = file[:i] + file[i+1:]
+        #fileName = file + 'Data.txt'
         try:
             with open(fileName) as json_file:
                 self.preexisting = True
@@ -158,7 +161,6 @@ def mousePressed(self, event):
     self.initialScrollValue = event.y
 
 #move this before all of the user input! 
-#by the way, this is an absolutely legnedary function, i believe i have peaked, god bless. 
 def inMatchButton(self, x, y):
     start = 350
     size = 120
@@ -211,6 +213,7 @@ def keyPressed(self, event):
         if self.matchHistory != None:
             self.screenShift = (len(self.matchHistory) - 4) * 120
             #120 is the 'size' of the buttons
+    #ERROR: 
     elif event.key == "Escape":
         MyModalApp.appStarted(self.app)
         #self.app.resetEverything = True
@@ -261,11 +264,11 @@ def rankForJsonLoader(self, gameCreation):
     else:
         rank = None
     return rank
+    #e.g.:
     #1612032984 - 432000
 
 def EPICGGSCORE(self):
     return None
-    #lmao
 
 
 def summonerIdTimeline(self, id, data):
@@ -366,7 +369,7 @@ def matchJsonLoader(self):
         self.matchIds[self.j]['gameWide'] = gameWide
         self.matchIds[self.j]['participantIdentities'] = participants
         self.matchIds[self.j]['summonerIdTimeline'] = timeline
-        self.matchIds[self.j]['EPICGGSCORE'] = self.EPICGGSCORE() #lmfao, 
+        self.matchIds[self.j]['EPICGGSCORE'] = self.EPICGGSCORE() #NULL
         self.j += 1
         """
         'info already here'
@@ -442,11 +445,12 @@ def updatePreexistingController(self):
             for match in self.matchIds:
                 self.matchHistory.insert(0, match)
             #file Name:
-            file = self.summonerName.lower()
-            for i in range(len(file)):
-                if file[i] == " ":
-                    file = file[:i] + file[i+1:]
-            fileName = file + 'Data.txt'
+            fileName = self.app.summonerInfo['accountId']
+            #file = self.summonerName.lower()
+            #for i in range(len(file)):
+            #    if file[i] == " ":
+            #        file = file[:i] + file[i+1:]
+            #fileName = file + 'Data.txt'
             with open(fileName, 'w') as outfile:
                 json.dump(self.matchHistory, outfile, indent=4)
             appStarted(self)
@@ -463,11 +467,12 @@ def updateController(self):
             matchJsonLoader(self)
         else:
             self.updating = False
-            file = self.summonerName.lower()
-            for i in range(len(file)):
-                if file[i] == " ":
-                    file = file[:i] + file[i+1:]
-            fileName = file + 'Data.txt'
+            fileName = self.app.summonerInfo['accountId']
+            #file = self.summonerName.lower()
+            #for i in range(len(file)):
+            #    if file[i] == " ":
+            #        file = file[:i] + file[i+1:]
+            #fileName = file + 'Data.txt'
             with open(fileName, 'w') as outfile:
                 json.dump(self.matchIds, outfile, indent=4)
             appStarted(self)

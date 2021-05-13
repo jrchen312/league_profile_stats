@@ -8,26 +8,17 @@ import json
 # dictionary. 'unranked', 'bronze', .... 'challenger'
 def loadRanks(self):
     self.rankIcons = dict()
-    temp = self.loadImage('images/Emblem_Iron.png')
-    self.rankIcons['iron'] = self.scaleImage(temp, 1/6)
-    temp = self.loadImage('images/Emblem_Bronze.png')
-    self.rankIcons['bronze'] = self.scaleImage(temp, 1/6)
-    temp = self.loadImage('images/Emblem_Silver.png')
-    self.rankIcons['silver'] = self.scaleImage(temp, 1/6)
-    temp = self.loadImage('images/Emblem_Gold.png')
-    self.rankIcons['gold'] = self.scaleImage(temp, 1/6)
-    temp = self.loadImage('images/Emblem_Platinum.png')
-    self.rankIcons['platinum'] = self.scaleImage(temp, 1/6)
-    temp = self.loadImage('images/Emblem_Diamond.png')
-    self.rankIcons['diamond'] = self.scaleImage(temp, 1/6)
-    temp = self.loadImage('images/Emblem_Master.png')
-    self.rankIcons['master'] = self.scaleImage(temp, 1/6)
-    temp = self.loadImage('images/Emblem_Grandmaster.png')
-    self.rankIcons['grandmaster'] = self.scaleImage(temp, 1/6)
-    temp = self.loadImage('images/Emblem_Challenger.png')
-    self.rankIcons['challenger'] = self.scaleImage(temp, 1/6)
-
-    self.rankIcons['unranked'] = self.rankIcons['challenger']
+    rank_directory = dict()
+    try:
+        #Open ./data/ranks.txt:
+        with open("data/ranks.txt") as json_file:
+            rank_directory = json.load(json_file)
+    except:
+        raise("Ranks.txt was deleted.")
+    #Load each rank image into rankIcons at 1/6 the original size. 
+    for key in rank_directory:
+        temp = self.loadImage(rank_directory[key])
+        self.rankIcons[key] = self.scaleImage(temp, 1/6)
 
 
 #loads the summoner icons into self.summonerSpellIcons.
@@ -100,15 +91,14 @@ def summonerIconRank(self):
         self.summonerRank = self.app.summonerInfo['tier'].title() + " " +self.app.summonerInfo['rank']
         self.summonerTier = self.app.summonerInfo['tier'].lower()
 
-
-
 def preexistingMatchHistoryInformation(self):
     #Preexisting match history information
-    file = self.summonerName.lower()
-    for i in range(len(file)):
-        if file[i] == " ":
-            file = file[:i] + file[i+1:]
-    fileName = file + 'Data.txt'
+    fileName = self.app.summonerInfo['accountId']
+    #file = self.summonerName.lower()
+    #for i in range(len(file)):
+    #    if file[i] == " ":
+    #        file = file[:i] + file[i+1:]
+    #fileName = file + 'Data.txt'
     try:
         with open(fileName) as json_file:
             self.matchHistory = json.load(json_file)
