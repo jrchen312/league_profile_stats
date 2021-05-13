@@ -5,6 +5,7 @@
 from cmu_112_graphics import *
 import json
 import time
+
 import search_screen
 import modal_app_init
 
@@ -30,6 +31,8 @@ class Button(object):
         return None
 
 
+# Initializes some variables for the app. 
+# Initializes the API. 
 class MyModalApp(ModalApp):
     def appStarted(app):
         app.searchScreenMode = SearchScreen()
@@ -704,8 +707,9 @@ class SummonerInfo(Mode):
         elif event.key == "Home":
             self.screenShift = 0
         elif event.key == "End":
-            self.screenShift = (len(self.matchHistory) - 4) * 120
-            #120 is the 'size' of the buttons
+            if self.matchHistory != None:
+                self.screenShift = (len(self.matchHistory) - 4) * 120
+                #120 is the 'size' of the buttons
         elif event.key == "Escape":
             MyModalApp.appStarted(self.app)
             #self.app.resetEverything = True
@@ -1207,7 +1211,7 @@ class SummonerInfo(Mode):
 
 
 
-
+# Initial screen that comes up when the app is open: 
 class SearchScreen(Mode):
     def appStarted(self):
         search_screen.appStarted(self)

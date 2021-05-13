@@ -1,5 +1,8 @@
 import json
 
+# Initializes some variables for the app. 
+# Initializes the API. 
+
 
 def appStarted(app):
     app.setActiveMode(app.searchScreenMode)
