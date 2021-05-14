@@ -3,7 +3,7 @@ import json
 import requests
 import time
 import summoner_info_appstarted
-
+import button
 
 
 
@@ -84,7 +84,9 @@ def swap(a, i, j):
 
 
 
-
+################################################################################
+#
+# User input
 def mousePressed(self, event):
     buttonX, buttonY = self.buttonLocation
     dy, dx = self.buttonSize
@@ -218,6 +220,12 @@ def keyPressed(self, event):
         MyModalApp.appStarted(self.app)
         #self.app.resetEverything = True
         #self.app.setActiveMode(app.searchScreenMode)
+
+
+
+################################################################################
+#
+# Timer Fired
 
 
 def matchIdLoader(self):
@@ -477,6 +485,12 @@ def updateController(self):
                 json.dump(self.matchIds, outfile, indent=4)
             appStarted(self)
 
+
+
+
+###############################################################################
+#
+# REDRAW ALL
 def redrawAll(self, canvas):
     #Header:
     pageLeft = self.pageLeft #120???

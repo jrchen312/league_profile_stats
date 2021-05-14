@@ -1,5 +1,6 @@
 import requests
 import json
+import button
 
 ###############################################################################
 # First stage:
@@ -14,7 +15,7 @@ def loadRanks(self):
         with open("data/ranks.txt") as json_file:
             rank_directory = json.load(json_file)
     except:
-        raise("Ranks.txt was deleted.")
+        raise("ranks.txt was deleted.")
     #Load each rank image into rankIcons at 1/6 the original size. 
     for key in rank_directory:
         temp = self.loadImage(rank_directory[key])
@@ -34,7 +35,6 @@ def loadSummonerSpells(self):
     for idNum in names:
         tempImg = self.loadImage('images/' + names[idNum])
         self.summonerSpellIcons[idNum] = self.scaleImage(tempImg, 1/2)
-    #print(self.summonerSpellIcons)
 
 
 def loadChampionDetails(self):
@@ -266,12 +266,12 @@ def loadAggregateStats(self):
 def create_buttons(self):
     #creating the buttons
     self.buttons = []
-    x = Button.xsize/2 + self.pageLeft
+    x = button.Button.xsize/2 + self.pageLeft
     y = 350
-    self.buttons.append(Button(x, y, 'Champion'))
+    self.buttons.append(button.Button(x, y, 'Champion'))
     traits = ['Games', 'Wins', 'Losses', 'Win Rate', 'Kills', 'Deaths', 'Assists', 'Damage', 'Dmg Taken', 'Vision', 'Gold', 'CS']
     for i in range(len(traits)):
-        self.buttons.append(Button(x+Button.xsize*(1+i),y, traits[i]))
+        self.buttons.append(button.Button(x+button.Button.xsize*(1+i),y, traits[i]))
 
 
 

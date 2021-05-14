@@ -1,7 +1,7 @@
 {
     "iron": "images/Emblem_Iron.png",
     "bronze": "images/Emblem_Bronze.png",
-    "silver": "images/Emblem_Siver.png",
+    "silver": "images/Emblem_Silver.png",
     "gold": "images/Emblem_Gold.png",
     "platinum": "images/Emblem_Platinum.png",
     "diamond": "images/Emblem_Diamond.png",
