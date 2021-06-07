@@ -289,6 +289,8 @@ def EPICGGSCORE(self):
     return None
 
 
+#Helper function: Uses the timeline data of all of the summoners to tally up 
+# basic game stats, like the number of kills, deaths, assists, etc. 
 def summonerIdTimeline(self, id, data):
     team100 = [1, 2, 3, 4, 5]
     team200 = [6, 7, 8, 9, 10]
@@ -359,6 +361,13 @@ def summonerIdTimeline(self, id, data):
 
     return summonerFrames, skillLevelUps
 
+#Leading function: Given a self.j index, attempts to access the v4Match and v4Timeline
+# information. If both API calls are functional, then by relying on the upper
+# helper functions, update "self.matchIds" with relevant match data. 
+
+#NOTE: v4Match may be depreciated, so this does not work. 
+#NOTE: to decrease the data space, it is WIP to decrease the amount of information
+#       that is stored in "self.matchIds[self.j]"
 def matchJsonLoader(self):
     match = self.matchIds[self.j]
     gameId = match['gameId']
@@ -406,12 +415,15 @@ def matchJsonLoader(self):
     self.progress = int(100 - (len(self.matchIds)-self.j)/(len(self.matchIds))*100)
     #print(f"Estimated Time remaining: {self.estimatedTime} seconds; progress: {self.progress}%")
 
+#Helper: returns the participant ID (integer from 1-10) for the summoner. 
 def getParticipantIdOfSummoner(self, participants):
     for participant in participants:
         if participant['player']['currentAccountId'] == self.app.summonerInfo['accountId']:
             return participant['participantId']
 
-
+#TimerFired: 2 modes:
+#Mode 1: updating: runs through the updateControllers.
+#Mode 2: overview: manages the page in overview mode. 
 def timerFired(self):
     if self.updating and not self.preexisting:
         updateController(self)
