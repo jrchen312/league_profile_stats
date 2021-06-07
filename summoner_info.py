@@ -1,4 +1,4 @@
-#need to slim this down a ton. 
+#need to slim this down a ton.
 import json
 import requests
 import time
@@ -156,7 +156,7 @@ def mousePressed(self, event):
             except:
                 self.app.matchInfo = self.matchHistory[0]
             
-            #now all we have to do is to go to the other screen, poggers!!! let's go!!!!!!!
+
     #################
     # scrolling?
     self.scrolling = True
@@ -228,6 +228,9 @@ def keyPressed(self, event):
 # Timer Fired
 
 
+#Grabs the next 100 matches from the account's matchlist. 
+# matchv4   matchlist
+# this is going to be outdated very soon. 
 def matchIdLoader(self):
     url = 'https://na1.api.riotgames.com/lol/match/v4/matchlists/by-account/' + self.app.summonerInfo['accountId'] + '?beginIndex=' + str(self.i) + '&api_key=' + self.app.api
     temp = requests.get(url)
@@ -240,6 +243,8 @@ def matchIdLoader(self):
         self.currentMatchList = matches # ['totalGames']
         self.i += 100
 
+#Helper function: separates the "participantStats", returning information for
+# both teams ("team100", "team200") along with the "gameWide" stats. 
 def team100team200Helper(self, participantStats):
     team100Stats = []
     team200Stats = []
@@ -264,7 +269,9 @@ def team100team200Helper(self, participantStats):
     gameWide = {'mostDmgDone': mostDmgDone, 'mostDmgTaken': mostDmgTaken}
     return team100, team200, gameWide
 
-#helper function to get the rank (if there is one). 
+#helper function to get the rank (if there is one).
+# We only update "rank" if the match was played within a week of the update time
+# to preserve a fuzzy amount of accuracy.  
 def rankForJsonLoader(self, gameCreation):
     secondsInFiveDays = 432000
     if time.time() - secondsInFiveDays < gameCreation:
@@ -275,6 +282,9 @@ def rankForJsonLoader(self, gameCreation):
     #e.g.:
     #1612032984 - 432000
 
+#Helper fuNCTION: currently WIP. 
+# Will return a scoring of the summoner's performance in this game based 
+# primarily on early game metrics (most relevant for the jungle role). 
 def EPICGGSCORE(self):
     return None
 
@@ -295,7 +305,8 @@ def summonerIdTimeline(self, id, data):
     # -- 1: kills: 1, deaths: 2, assists: 3, 
 
     for minuteDictionary in data['frames']:
-        zz = [ 'participantFrames (dict) ', 'events (list)', 'timestamp (milliseconds)']
+        #contents of minuteDictionary :
+        # [ 'participantFrames (dict) ', 'events (list)', 'timestamp (milliseconds)']
 
         #declaration of a temp dictionary to store the results
         temp = dict()
@@ -491,6 +502,7 @@ def updateController(self):
 ###############################################################################
 #
 # REDRAW ALL
+
 def redrawAll(self, canvas):
     #Header:
     pageLeft = self.pageLeft #120???
@@ -646,7 +658,7 @@ def drawOverview(self, canvas):
 
         kda = f"{k}/{d}/{a}"
         if d == 0:
-            kd = f"KDA: {round(k+a, 2)}:1"
+            kd = f"KDA: {round(k+a, 2)}:1" # 2 decimal places
         else:
             kd = f"KDA: {round((k+a)/d, 2)}:1"
         canvas.create_text(x0 + 130, y0 + size*(2/5), text=championPlayed, font='calibri 18 bold')

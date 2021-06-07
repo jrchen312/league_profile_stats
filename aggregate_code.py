@@ -5,6 +5,7 @@
 from cmu_112_graphics import *
 import json
 import time
+import requests
 
 import search_screen
 import modal_app_init
@@ -242,137 +243,7 @@ class SummonerInfo(Mode):
         summoner_info.appStarted(self)
 
     def mousePressed(self, event):
-        buttonX, buttonY = self.buttonLocation
-        dy, dx = self.buttonSize
-        buttonX1, buttonY1 = buttonX + dx, buttonY + dy
-        if buttonX <= event.x <= buttonX1 and buttonY <= event.y <= buttonY1:
-            print('UPDATING')
-            self.updating = True
-            #getting the file name:
-            file = self.summonerName.lower()
-            for i in range(len(file)):
-                if file[i] == " ":
-                    file = file[:i] + file[i+1:]
-            fileName = file + 'Data.txt'
-            try:
-                with open(fileName) as json_file:
-                    self.preexisting = True
-                    print('file found!')
-            except:
-                self.preexisting = False
-                print('no file found!')
-        ##################################
-        #Code for the mode buttons: pretty poor practice
-        #button1 position:
-        buttonSize = self.modeButtonSize
-        x0, y0, x1, y1 = self.pageLeft, 290, self.pageLeft+buttonSize, 320
-        #button2 position:
-        x2, y2, x3, y3 = self.pageLeft+ buttonSize, 290, self.pageLeft+buttonSize * 2, 320
-        #button3 pos:
-        x4, y4, x5, y5 = self.pageLeft + buttonSize*2, 290, self.pageLeft+buttonSize*3, 320
-        if x0 <= event.x <= x1 and y0 <= event.y <= y1:
-            self.mode = "overview"
-            self.screenShift = 0
-        elif x2 <= event.x <= x3 and y2 <= event.y <= y3:
-            self.mode = "champions"
-            self.screenShift = 0
-        elif x4 <= event.x <= x5 and y4 <= event.y <= y5:
-            self.mode = "improvement"
-            self.screenShift = 0
-        
-        ############
-        # code for the buttons on the 'champions' screen
-        if self.mode == 'champions':
-            for button in self.buttons:
-                result = button.pointInButton(event.x, event.y)
-                if result != None and result != "Champion":
-                    if result == self.sortingFactor:
-                        self.descending = not self.descending
-                    
-                    self.sortingFactor = result
-                    self.sortedAggregateStats = SummonerInfo.sortDictionary(self, self.championStats, self.sortingFactor)
-                    if self.descending:
-                        self.sortedAggregateStats.reverse()
-                #buttons:
-                #['Games', 'Wins', 'Losses', 'Win Rate', 'Kills', 'Deaths', 'Assists', 'Damage', 'Dmg Taken', 'Vision', 'Gold', 'CS']
-                # self.descending variable
-        ###########
-        # 
-        if self.mode == 'overview':
-            temp = SummonerInfo.inMatchButton(self, event.x, event.y)
-            if temp != None:
-                print(temp)
-                self.app.currMatch = temp
-                try:
-                    self.app.matchInfo = self.matchHistory[temp]
-                    self.app.setActiveMode(self.app.matchInfoMode)
-                except:
-                    self.app.matchInfo = self.matchHistory[0]
-                
-                #now all we have to do is to go to the other screen, poggers!!! let's go!!!!!!!
-        #################
-        # scrolling?
-        self.scrolling = True
-        self.initialScrollValue = event.y
-    
-    #move this before all of the user input! 
-    #by the way, this is an absolutely legnedary function, i believe i have peaked, god bless. 
-    def inMatchButton(self, x, y):
-        start = 350
-        size = 120
-        buffer = 15
-        buttonWidth = 50
-        #change the x0 and x1 later. We need to draw a few buttons.. 
-        x0 = self.width-(self.pageLeft + buttonWidth)
-        x1 = self.width-self.pageLeft
-        y0 = start
-        y1 = self.height
-        if x0 <= x <= x1 and y0 <= y <= y1:
-            topIndex = self.screenShift//size
-            topIndexPixels = self.screenShift%size
-            y -= start
-
-            tempY0 = buffer - topIndexPixels
-            tempY1 = size - topIndexPixels
-            i = 0
-            while tempY1 < self.height:
-                if tempY0 <= y <= tempY1:
-                    result = topIndex + i
-                    if result < len(self.matchHistory):
-                        return (topIndex + i)
-                i += 1
-                tempY0 += size
-                tempY1 += size
-        return None
-
-
-    def mouseDragged(self, event):
-        self.screenShift += (self.initialScrollValue - event.y) * 2
-        self.initialScrollValue = event.y
-
-    def mouseReleased(self, event):
-        self.scrolling = False #yeah, this is probably pretty useless lol
-        #print(self.screenShift, self.gameStartIndex)
-
-
-    def keyPressed(self, event):
-        if event.key == "Enter":
-            pass
-
-        elif event.key == "Down":
-            self.screenShift += 25
-        elif event.key == "Up":
-            self.screenShift -= 25
-        elif event.key == "Home":
-            self.screenShift = 0
-        elif event.key == "End":
-            if self.matchHistory != None:
-                self.screenShift = (len(self.matchHistory) - 4) * 120
-                #120 is the 'size' of the buttons
-        elif event.key == "Escape":
-            MyModalApp.appStarted(self.app)
-            #self.app.resetEverything = True
-            #self.app.setActiveMode(app.searchScreenMode)
+        summoner_info.mousePressed(self, event);
 
 
     def matchIdLoader(self):
