@@ -1,0 +1,30 @@
+obtaining matchlists:
+old: 
+we use the "accountId" for this request
+
+{
+    "matches": [
+        {
+            "platformId": "NA1",
+            "gameId": 3851772529,
+            "champion": 20,
+            "queue": 420,
+            "season": 13,
+            "timestamp": 1617426504403,
+            "role": "NONE",
+            "lane": "JUNGLE"
+        }
+    ]
+}
+
+
+new:
+we use the "puuId" for this request.
+
+[
+    "NA1_3851772529"
+]
+
+Changes:
+new data type
+input is also different. 
