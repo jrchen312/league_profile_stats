@@ -28,6 +28,7 @@ def appStarted(self):
     self.preexisting = False
     self.matchIds = []
     self.currentMatchList = None
+    self.matchListLength #NOTE: this is the new method. 
     self.i = 0
     self.j = 0
     self.progress = 0
@@ -231,19 +232,30 @@ def keyPressed(self, event):
 
 #Grabs the next 100 matches from the account's matchlist. 
 # matchv4   matchlist (depreciated 6/26/2021)
-# this is going to be outdated very soon. 
+
 def matchIdLoader(self):
     #url = 'https://na1.api.riotgames.com/lol/match/v4/matchlists/by-account/' + self.app.summonerInfo['accountId'] + '?beginIndex=' + str(self.i) + '&api_key=' + self.app.api
     v5_url = ("https://americas.api.riotgames.com/lol/match/v5/matches/by-puuid/" + 
             self.app.summonerInfo['puuid'] + '/ids?start=' + str(self.i) + 
-            '&count=' + (str(self.i+100)) + '&api_key=' + self.app.api)
+            '&count=' + (str(100)) + '&api_key=' + self.app.api)
     temp = requests.get(v5_url)
     if temp.status_code == 200:
 
-        matches = temp.json()
-        for match in matches['matches']:
-            self.matchIds.append(match)
+        matches = temp.json()  #"matches" to a list of matchIds.
+        for match in matches:
+            storage = dict()
+            storage['gameId'] = match;
+            self.matchIds.append(storage)
         
+        #NOTE: self.currentMatchList is no longer a dictionary, and no longerhas
+        #       a "totalGames" field. 
+        # self.currentMatchList = {'totalGames': 9999}
+        # self.matchListLength = 9999;
+        if (matches == []):
+            self.matchListLength = len(self.matchIds);
+            self.i = len(self.matchIds);
+            break;
+
         self.currentMatchList = matches # ['totalGames']
         self.i += 100
 
@@ -453,13 +465,15 @@ def timerFired(self):
 
 def updatePreexistingController(self):
     #populating the self.matchIds list
-    if self.currentMatchList == None:
+    if self.i == 0:
         matchIdLoader(self)
         #time of the most recent match
+        #NOTE: TIMESTAMPS NO LONGER EXIST ANYMORE! have to phase out "self.mostRecentMatchDate"
         self.mostRecentMatchDate = self.matchHistory[0]['timestamp']
+        #NOTE: use "self.mostRecentMatchId"?
         #toggle variable.
         self.matchIdsPrepared = False
-    elif self.i < self.currentMatchList['totalGames']:
+    elif self.i < self.matchListLength:
         matchIdLoader(self)
     else:
         if not self.matchIdsPrepared:
@@ -479,22 +493,16 @@ def updatePreexistingController(self):
             #updating self.matchHistory
             for match in self.matchIds:
                 self.matchHistory.insert(0, match)
-            #file Name:
             fileName = self.app.summonerInfo['accountId']
-            #file = self.summonerName.lower()
-            #for i in range(len(file)):
-            #    if file[i] == " ":
-            #        file = file[:i] + file[i+1:]
-            #fileName = file + 'Data.txt'
             with open(fileName, 'w') as outfile:
                 json.dump(self.matchHistory, outfile, indent=4)
             appStarted(self)
 
 def updateController(self):
     #if no games are loaded, or if not all "game details" are loaded yet. 
-    if self.currentMatchList == None or self.i < self.currentMatchList['totalGames']:
+    if self.i < self.matchListLength:
         matchIdLoader(self)
-    elif self.i >= self.currentMatchList['totalGames']:
+    elif self.i >= self.matchListLength:
         #Load the match information and then store it into a file and restarting this app mode.
         #printf("Number of matches: {len(self.matchIds)}")
 
@@ -503,7 +511,7 @@ def updateController(self):
         if self.j < len(self.matchIds):
             matchJsonLoader(self)
 
-        #Else, store the information into the text file. 
+        #Else, store the information into the text file and restart summonerinfo
         else:
             self.updating = False
             fileName = self.app.summonerInfo['accountId']
