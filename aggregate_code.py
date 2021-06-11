@@ -247,6 +247,16 @@ class SummonerInfo(Mode):
     def mousePressed(self, event):
         summoner_info.mousePressed(self, event)
 
+    def keyPressed(self, event):
+        summoner_info.keyPressed(self, event)
+        if event.key == "Escape":
+            MyModalApp.appStarted(self.app)
+            #self.app.resetEverything = True
+            #self.app.setActiveMode(app.searchScreenMode)
+
+    def mouseDragged(self, event):
+        summoner_info.mouseDragged(self, event)
+
     def timerFired(self):
         summoner_info.timerFired(self)
 
@@ -262,7 +272,7 @@ class SearchScreen(Mode):
 
     def keyPressed(self, event):
         search_screen.keyPressed(self, event)
-
+        
     def timerFired(self):
         search_screen.timerFired(self)
 

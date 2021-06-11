@@ -37,7 +37,6 @@ def appStarted(self):
     self.mode = "overview" # "overview", "champions", "improvement"??
     self.modeButtonSize = (self.width-self.pageLeft*2)//3
     self.screenShift = 0
-    self.scrolling = False
     self.initialScrollValue = 0
 
     self.gameStartIndex = 0
@@ -161,7 +160,6 @@ def mousePressed(self, event):
 
     #################
     # scrolling?
-    self.scrolling = True
     self.initialScrollValue = event.y
 
 #move this before all of the user input! 
@@ -198,10 +196,6 @@ def mouseDragged(self, event):
     self.screenShift += (self.initialScrollValue - event.y) * 2
     self.initialScrollValue = event.y
 
-def mouseReleased(self, event):
-    self.scrolling = False #yeah, this is probably pretty useless lol
-    #print(self.screenShift, self.gameStartIndex)
-
 
 def keyPressed(self, event):
     if event.key == "Enter":
@@ -217,11 +211,6 @@ def keyPressed(self, event):
         if self.matchHistory != None:
             self.screenShift = (len(self.matchHistory) - 4) * 120
             #120 is the 'size' of the buttons
-    #ERROR: 
-    elif event.key == "Escape":
-        MyModalApp.appStarted(self.app)
-        #self.app.resetEverything = True
-        #self.app.setActiveMode(app.searchScreenMode)
 
 
 
@@ -254,7 +243,7 @@ def matchIdLoader(self):
         if (matches == []):
             self.matchListLength = len(self.matchIds);
             self.i = len(self.matchIds);
-            break;
+            return;
 
         self.currentMatchList = matches # ['totalGames']
         self.i += 100
