@@ -9,3 +9,7 @@ Very user-intuitive and responsive GUI.
 Data storing for offline use (WIP). 
 
 Progress graphs over time (WIP). 
+
+
+
+Currently waiting for riot games to update their api.
